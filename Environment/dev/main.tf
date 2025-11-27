@@ -15,3 +15,15 @@ module "virtual_network" {
   source     = "../../Modules/azurerm_virtual_network"
   virtual_networks = var.virtual_networks
 }
+
+module "public_ip" {
+  depends_on = [ module.resource_group ]
+  source                = "../../Modules/azurerm_pip"
+  public_ips = var.public_ips
+}
+
+module "azurerm_bastion_host" {
+  depends_on = [ module.virtual_network, module.public_ip, module.resource_group ]
+  source                = "../../Modules/azurerm_bastion"
+  bastion_hosts = var.bastion_hosts
+}

@@ -54,20 +54,29 @@ virtual_networks = {
       }
     }
   }
-  vnet2 = {
-    name                = "secondary-vnet"
-    address_space       = ["10.0.0.0/16"]
-    location            = "central india"
+  
+}
+
+public_ips = {
+  ip1 = {
+    name                = "mdpub-ip"
     resource_group_name = "rg-md-01"
-    subnets = {
-      subnet1 = {
-        name             = "frontend-subnet"
-        address_prefixes = ["10.0.1.0/24"]
-      }
-      subnet2 = {
-        name             = "AzureBastionSubnet"
-        address_prefixes = ["10.0.2.0/24"]
-      }
+    location            = "central india"
+    allocation_method   = "Static"
+  }
+  
+}
+
+bastion_hosts = {
+  bastion1 = {
+    name                 = "md-bastion-01"
+    location             = "central india"
+    resource_group_name  = "rg-md-01"
+    subnet_name          = "subnet3"
+    public_ip_name       = "ip1"
+    virtual_network_name = "vnet1"
+    ip_configuration = {
+      name = "bastion1-ip-config"
     }
   }
 }
