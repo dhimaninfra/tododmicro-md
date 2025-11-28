@@ -3,3 +3,8 @@ variable "storage_account" {}
 variable "virtual_networks" {}
 variable "public_ips" {}
 variable "bastion_hosts" {}
+variable "key_vaults" {}
+variable "kubernetes_clusters" {}
+variable "container_registries" {}
+variable "mssql_servers" {}
+variable "mssql_databases" {}

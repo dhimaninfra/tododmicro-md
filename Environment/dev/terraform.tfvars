@@ -2,34 +2,22 @@ resource_groups = {
     "rg1" = {
         name = "rg-md-01"
         location = "central India"
-    }
-
-    "rg2" = {
-        name = "rg-md-02"
-        location = "Central India"
-        managed_by = "mohit dhiman"
         tags = {
             environemnt = "dev"
             owner = "mohit"
         }
     }
+
 }
 
 storage_account = {
   "stg-1" = {
-    name                     = "storagemd01"
+    name                     = "storagemd0111"
     account_tier             = "Standard"
     resource_group_name      = "rg-md-01"
     location                 = "central india"
     account_replication_type = "LRS"
 
-  }
-  "stg-2" = {
-    name                     = "storagemd02"
-    account_tier             = "Standard"
-    resource_group_name      = "rg-md-01"
-    location                 = "central india"
-    account_replication_type = "LRS"
   }
 }
 
@@ -72,12 +60,96 @@ bastion_hosts = {
     name                 = "md-bastion-01"
     location             = "central india"
     resource_group_name  = "rg-md-01"
-    subnet_name          = "subnet3"
-    public_ip_name       = "ip1"
-    virtual_network_name = "vnet1"
+    subnet_name          = "AzureBastionSubnet"
+    public_ip_name       = "mdpub-ip"
+    virtual_network_name = "Primary-vnet"
     ip_configuration = {
       name = "bastion1-ip-config"
     }
   }
 }
 
+key_vaults = {
+  kv1 = {
+    name                = "mdkeyvault1"
+    resource_group_name = "rg-md-01"
+    location            = "central india"
+    sku_name            = "standard"
+    access_policy = [{
+      key_permissions     = ["Get", "List"]
+      secret_permissions  = ["Get", "List"]
+      storage_permissions = ["Get", "List"]
+    }]
+  }
+}
+
+kubernetes_clusters = {
+  cluster1 = {
+    name                = "md-aks-01"
+    location            = "central india"
+    resource_group_name = "rg-md-01"
+    dns_prefix          = "mdaks01"
+    identity = {
+      type = "SystemAssigned"
+    }
+    default_node_pool = [{
+      name       = "cluster1pool"
+      node_count = 2
+      vm_size    = "Standard_A2_v2"
+    }]
+  }
+}
+
+container_registries = {
+  acr1 = {
+    name                = "mdcontainerregistry"
+    resource_group_name = "rg-md-01"
+    location            = "central india"
+    sku                 = "Premium"
+    admin_enabled       = true
+    georeplications = [
+      {
+        location                = "East US"
+        zone_redundancy_enabled = false
+        tags = {
+          environment = "dev"
+        }
+      },
+      {
+        location                = "West US"
+        zone_redundancy_enabled = false
+        tags = {
+          environment = "dev"
+        }
+      }
+    ]
+  }
+}
+
+mssql_servers = {
+  mssql1 = {
+    name                         = "md-mssql-01"
+    resource_group_name          = "rg-md-01"
+    location                     = "central india"
+    version                      = "12.0"
+    administrator_login          = "sqladmin"
+    administrator_login_password = "Sql@123456"
+    minimum_tls_version          = "1.2"
+    azuread_administrator = {
+      login_username = "azureadmin1"
+    }
+  }
+}
+
+mssql_databases = {
+  db1 = {
+    name                 = "md-sql-db-01"
+    server_name          = "md-mssql-01"
+    resource_group_name  = "rg-md-01"
+    collation            = "SQL_Latin1_General_CP1_CI_AS"
+    license_type         = "BasePrice"
+    max_size_gb         = 10
+    sku_name             = "S0"
+    enclave_type         = "Default"
+  }
+}
