@@ -8,3 +8,5 @@ variable "kubernetes_clusters" {}
 variable "container_registries" {}
 variable "mssql_servers" {}
 variable "mssql_databases" {}
+variable "network_interfaces" {}
+variable "linux_virtual_machines" {}

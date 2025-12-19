@@ -153,3 +153,53 @@ mssql_databases = {
     enclave_type         = "Default"
   }
 }
+network_interfaces = {
+  nic1 = {
+    name                 = "md-nic1"
+    location             = "central india"
+    resource_group_name  = "rg-md-01"
+    subnet_name          = "frontend-subnet"
+    virtual_network_name = "Primary-vnet"
+    ip_configurations = [{
+      name                          = "md-nic1-ip"
+      private_ip_address_allocation = "Dynamic"
+    }]
+  }
+  nic2 = {
+    name                 = "md-nic2"
+    location             = "central india"
+    resource_group_name  = "rg-md-01"
+    subnet_name          = "frontend-subnet"
+    virtual_network_name = "Primary-vnet"
+    ip_configurations = [{
+      name                          = "md-nic2-ip"
+      private_ip_address_allocation = "Dynamic"
+    }]
+  }
+
+}
+
+linux_virtual_machines = {
+  vm1 = {
+    name                            = "md-vm-01"
+    resource_group_name             = "rg-md-01"
+    location                        = "central india"
+    size                            = "standard_b1s"
+    admin_username                  = "mdhiman"
+    admin_password                  = "Tiyameet@123"
+    disable_password_authentication = false
+    network_interface_name          = "md-nic1"
+
+    os_disk = {
+      caching              = "ReadWrite"
+      storage_account_type = "Standard_LRS"
+    }
+
+    source_image_reference = {
+      publisher = "Canonical"
+      offer     = "0001-com-ubuntu-server-focal"
+      sku       = "20_04-lts"
+      version   = "latest"
+    }
+  }
+}
