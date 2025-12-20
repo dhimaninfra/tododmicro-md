@@ -26,6 +26,14 @@ storage_account = {
     account_replication_type = "LRS"
 
   }
+  "stg-2" = {
+    name                     = "storagemd0112"
+    account_tier             = "Standard"
+    resource_group_name      = "rg-md-01"
+    location                 = "central india"
+    account_replication_type = "LRS"
+
+  }
 }
 
 virtual_networks = {
