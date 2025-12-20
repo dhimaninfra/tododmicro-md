@@ -25,7 +25,12 @@ jobs:
           client-id: f8fb7094-6377-4063-9f42-7c1151a5235b
           tenant-id: ea1650b1-1446-43d7-ba77-0e2f959089e5
           subscription-id: a4638f3f-afa7-4287-8a26-626647841902
-            
+          
+      - name: Install Checkov
+        run: |
+          python -m pip install --upgrade pip
+          pip install checkov
+     
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
@@ -47,6 +52,10 @@ jobs:
         run: terraform plan -no-color -input=false
         continue-on-error: true
         working-directory: Environment/dev    
+        
+      - name: Checkov Scan (IaC Security)
+        run: checkov -d . --framework terraform --soft-fail
+        working-directory: Environment/dev
         
   terraform-apply:    
     runs-on: self-hosted
