@@ -1,4 +1,4 @@
-ame: "Dev Terraform Workflow"
+name: "Dev Terraform Workflow"
 
 on:
   pull_request:
@@ -75,3 +75,4 @@ jobs:
         continue-on-error: true
         working-directory: environments/dev              
           
+
