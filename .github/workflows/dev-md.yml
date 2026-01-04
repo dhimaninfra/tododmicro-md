@@ -25,6 +25,19 @@ jobs:
           client-id: f8fb7094-6377-4063-9f42-7c1151a5235b
           tenant-id: ea1650b1-1446-43d7-ba77-0e2f959089e5
           subscription-id: a4638f3f-afa7-4287-8a26-626647841902
+
+      - name: Install TFLint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      - name: TFLint Init
+        run: tflint --init
+        working-directory: Environment/dev
+
+      - name: TFLint Run (Terraform Linting)
+        run: tflint
+        working-directory: Environment/dev
+
           
       - name: Install Checkov
         run: |
