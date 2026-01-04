@@ -94,8 +94,7 @@ jobs:
         run: |
           infracost breakdown `
             --path Environment/dev `
-            --format json `
-            --out-file infracost.json
+            --format table
 
         # ---------- Infracost PR Comment ----------
       - name: Infracost PR Comment
