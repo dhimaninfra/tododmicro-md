@@ -44,7 +44,7 @@ jobs:
         working-directory: Environment/dev
 
       - name: TFLint Run (Soft fail)
-        run: tflint || exit 0
+        run: tflint; exit 0
         working-directory: Environment/dev
 
           
