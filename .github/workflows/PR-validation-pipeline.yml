@@ -96,10 +96,8 @@ jobs:
           infracost breakdown `
             --path Environment/dev `
             --format table
-            --format json `
-            --out-file infracost.json
-
-         # ---------- Infracost Breakdown in jason----------
+            
+        # ---------- Infracost Breakdown in jason----------
       - name: Infracost Breakdown
         shell: powershell
         env:
