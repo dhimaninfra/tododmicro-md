@@ -68,7 +68,7 @@ jobs:
         run: checkov -d . --framework terraform --soft-fail
         working-directory: Environment/dev
       
-        # ---------- Install Infracost ----------
+        # ---------- Install Infracast ----------
       - name: Install Infracost (Windows - No Admin)
         shell: powershell
         run: |
@@ -98,15 +98,12 @@ jobs:
             --format table
             
         # ---------- Infracost Breakdown in jason----------
-      - name: Infracost Breakdown
+      - name: Infracost Breakdown (JSON)
         shell: powershell
         env:
           INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
         run: |
-          infracost breakdown `
-            --path Environment/dev `
-            --format json `
-            --out-file infracost.json
+          infracost breakdown --path Environment/dev --format json --out-file infracost.json
 
         # ---------- Infracost PR Comment ----------
       - name: Infracost PR Comment
