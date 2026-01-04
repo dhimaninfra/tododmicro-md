@@ -50,89 +50,89 @@ jobs:
         run: tflint; exit 0
         working-directory: Environment/dev
 
-  # Checkov-scanning:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Install Checkov
-  #       run: |
-  #         python -m pip install --upgrade pip
-  #         pip install checkov
+  Checkov-scanning:
+    runs-on: self-hosted
+    steps:
+      - name: Install Checkov
+        run: |
+          python -m pip install --upgrade pip
+          pip install checkov
      
-  #     - name: Terraform fmt
-  #       id: fmt
-  #       run: terraform fmt -check
-  #       continue-on-error: true
-  #       working-directory: Environment/dev
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+        working-directory: Environment/dev
         
-  #     - name: Terraform Init
-  #       id: init
-  #       run: terraform init -input=false  
-  #       working-directory: Environment/dev
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false  
+        working-directory: Environment/dev
 
-  #     - name: Terraform Validate
-  #       id: validate
-  #       run: terraform validate -no-color
-  #       working-directory: Environment/dev        
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: Environment/dev        
       
-  #     - name: Terraform Plan
-  #       id: plan
-  #       run: terraform plan -no-color -input=false
-  #       continue-on-error: true
-  #       working-directory: Environment/dev    
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+        working-directory: Environment/dev    
         
-  #     - name: Checkov Scan (IaC Security)
-  #       run: checkov -d . --framework terraform --soft-fail
-  #       working-directory: Environment/dev
+      - name: Checkov Scan (IaC Security)
+        run: checkov -d . --framework terraform --soft-fail
+        working-directory: Environment/dev
         
-  # terraform-apply:    
-  #   runs-on: self-hosted
-  #   if: github.ref == 'refs/heads/main'
-  #   needs: terraform-init-plan
-  #   environment: dev
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v5.0.0
+  terraform-apply:    
+    runs-on: self-hosted
+    if: github.ref == 'refs/heads/main'
+    needs: terraform-init-plan
+    environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
     
-  #     - name: Azure Login
-  #       uses: Azure/login@v2.3.0
-  #       with:
-  #         client-id: f8fb7094-6377-4063-9f42-7c1151a5235b
-  #         tenant-id: ea1650b1-1446-43d7-ba77-0e2f959089e5
-  #         subscription-id: a4638f3f-afa7-4287-8a26-626647841902   
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: f8fb7094-6377-4063-9f42-7c1151a5235b
+          tenant-id: ea1650b1-1446-43d7-ba77-0e2f959089e5
+          subscription-id: a4638f3f-afa7-4287-8a26-626647841902   
           
-  #     - name: Terraform Init
-  #       id: init
-  #       run: terraform init -input=false  
-  #       working-directory: Environment/dev
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false  
+        working-directory: Environment/dev
 
-  #     - name: Terraform Apply
-  #       id: apply
-  #       run: terraform apply --auto-approve
-  #       continue-on-error: true
-  #       working-directory: Environment/dev       
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply --auto-approve
+        continue-on-error: true
+        working-directory: Environment/dev       
         
-  # terraform-destroy:
-  #   runs-on: self-hosted
-  #   needs: terraform-apply
-  #   if: github.ref == 'refs/heads/main'
-  #   environment: dev
+  terraform-destroy:
+    runs-on: self-hosted
+    needs: terraform-apply
+    if: github.ref == 'refs/heads/main'
+    environment: dev
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v5.0.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
 
-  #     - name: Azure Login
-  #       uses: Azure/login@v2.3.0
-  #       with:
-  #         client-id: f8fb7094-6377-4063-9f42-7c1151a5235b
-  #         tenant-id: ea1650b1-1446-43d7-ba77-0e2f959089e5
-  #         subscription-id: a4638f3f-afa7-4287-8a26-626647841902
+      - name: Azure Login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: f8fb7094-6377-4063-9f42-7c1151a5235b
+          tenant-id: ea1650b1-1446-43d7-ba77-0e2f959089e5
+          subscription-id: a4638f3f-afa7-4287-8a26-626647841902
 
-  #     - name: Terraform Init
-  #       run: terraform init -input=false
-  #       working-directory: Environment/dev
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: Environment/dev
 
-  #     - name: Terraform Destroy
-  #       run: terraform destroy --auto-approve
-  #       working-directory: Environment/dev
+      - name: Terraform Destroy
+        run: terraform destroy --auto-approve
+        working-directory: Environment/dev
         
