@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 concurrency:
   group: terraform-pr
@@ -67,7 +68,7 @@ jobs:
         run: checkov -d . --framework terraform --soft-fail
         working-directory: Environment/dev
       
-        # ---------- Install Infracost ----------
+        # ---------- Install Infracast ----------
       - name: Install Infracost (Windows - No Admin)
         shell: powershell
         run: |
@@ -86,7 +87,7 @@ jobs:
       - name: Verify Infracost
         run: infracost --version
         
-        # ---------- Infracost Breakdown ----------
+        # ---------- Infracost Breakdown in table----------
       - name: Infracost Breakdown
         shell: powershell
         env:
@@ -94,8 +95,15 @@ jobs:
         run: |
           infracost breakdown `
             --path Environment/dev `
-            --format json `
-            --out-file infracost.json
+            --format table
+            
+        # ---------- Infracost Breakdown in jason----------
+      - name: Infracost Breakdown (JSON)
+        shell: powershell
+        env:
+          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+        run: |
+          infracost breakdown --path Environment/dev --format json --out-file infracost.json
 
         # ---------- Infracost PR Comment ----------
       - name: Infracost PR Comment
@@ -104,10 +112,10 @@ jobs:
           INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          infracost comment github `
+            infracost comment github `
             --path infracost.json `
             --repo $env:GITHUB_REPOSITORY `
-            --pull-request $env:GITHUB_REF_NAME `
+            --pull-request ${{ github.event.pull_request.number }} `
             --github-token $env:GITHUB_TOKEN `
             --behavior update
 
