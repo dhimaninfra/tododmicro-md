@@ -68,14 +68,24 @@ jobs:
         working-directory: Environment/dev
       
         # ---------- Install Infracost ----------
-      - name: Install Infracost
+      - name: Install Infracost (Windows - No Admin)
         shell: powershell
         run: |
-          Invoke-WebRequest `
-            -Uri https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.ps1 `
-            -OutFile install-infracost.ps1
-          ./install-infracost.ps1
+         $version = "0.10.35"
+         $dir = "$env:RUNNER_TEMP\infracost"
+         New-Item -ItemType Directory -Force -Path $dir
 
+         Invoke-WebRequest `
+         -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
+         -OutFile "$dir\infracost.zip"
+
+          Expand-Archive "$dir\infracost.zip" -DestinationPath $dir -Force
+          echo "$dir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+        #----------Verify Installation -----------   
+      - name: Verify Infracost
+        run: infracost --version
+        
         # ---------- Infracost Breakdown ----------
       - name: Infracost Breakdown
         shell: powershell
