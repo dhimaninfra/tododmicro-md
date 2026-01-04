@@ -103,7 +103,7 @@ jobs:
         env:
           INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
+        run: |
             infracost comment github `
             --path infracost.json `
             --repo $env:GITHUB_REPOSITORY `
