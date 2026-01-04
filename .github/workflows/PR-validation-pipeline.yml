@@ -87,7 +87,7 @@ jobs:
       - name: Verify Infracost
         run: infracost --version
         
-        # ---------- Infracost Breakdown ----------
+        # ---------- Infracost Breakdown in table----------
       - name: Infracost Breakdown
         shell: powershell
         env:
@@ -96,6 +96,17 @@ jobs:
           infracost breakdown `
             --path Environment/dev `
             --format table
+            --format json `
+            --out-file infracost.json
+
+         # ---------- Infracost Breakdown in jason----------
+      - name: Infracost Breakdown
+        shell: powershell
+        env:
+          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+        run: |
+          infracost breakdown `
+            --path Environment/dev `
             --format json `
             --out-file infracost.json
 
