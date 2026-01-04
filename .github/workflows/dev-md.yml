@@ -52,6 +52,7 @@ jobs:
 
   Checkov-scanning:
     runs-on: self-hosted
+    needs: terrafrom-Linting-plan
     steps:
       - name: Install Checkov
         run: |
@@ -86,8 +87,11 @@ jobs:
         
   terraform-apply:    
     runs-on: self-hosted
+    needs: 
+      - Checkov-scanning
+      - terraform-init-plan
+    
     if: github.ref == 'refs/heads/main'
-    needs: terraform-init-plan
     environment: dev
     steps:
       - name: Checkout
