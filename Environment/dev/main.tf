@@ -9,11 +9,11 @@ module "resource_group" {
 #   storage_account = var.storage_account
 #   }
 
-module "virtual_network" {
-  depends_on = [ module.resource_group ]
-  source     = "../../Modules/azurerm_virtual_network"
-  virtual_networks = var.virtual_networks
-}
+# module "virtual_network" {
+#   depends_on = [ module.resource_group ]
+#   source     = "../../Modules/azurerm_virtual_network"
+#   virtual_networks = var.virtual_networks
+# }
 
 # module "network_interface" {
 #   depends_on = [ module.virtual_network ]
