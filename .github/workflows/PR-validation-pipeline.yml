@@ -1,0 +1,107 @@
+name: "Terraform PR Validation"
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: terraform-pr
+  cancel-in-progress: false
+
+jobs:
+
+  terraform-pr:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+
+      # ---------- Terraform Init ----------
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: Environment/dev
+
+      # ---------- Terraform FMT ----------
+      - name: Terraform Format Check
+        run: terraform fmt -check
+        continue-on-error: true
+        working-directory: Environment/dev
+
+      # ---------- Terraform Validate ----------
+      - name: Terraform Validate
+        run: terraform validate -no-color
+        working-directory: Environment/dev
+
+      # ---------- Install TFLint ----------
+      - name: Install TFLint (Windows - No Admin)
+        shell: powershell
+        run: |
+          $version = "0.50.3"
+          $dir = "$env:RUNNER_TEMP\tflint"
+          New-Item -ItemType Directory -Force -Path $dir
+          Invoke-WebRequest https://github.com/terraform-linters/tflint/releases/download/v$version/tflint_windows_amd64.zip -OutFile "$dir\tflint.zip"
+          Expand-Archive "$dir\tflint.zip" -DestinationPath $dir -Force
+          echo "$dir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      # ---------- TFLint ----------
+      - name: TFLint Init
+        run: tflint --init
+        working-directory: Environment/dev
+
+      - name: TFLint Run (Soft Fail)
+        run: tflint; exit 0
+        working-directory: Environment/dev
+
+      # ---------- Install Checkov ----------
+      - name: Install Checkov
+        run: |
+          python -m pip install --upgrade pip
+          pip install checkov
+
+      # ---------- Checkov Scan ----------
+      - name: Checkov Scan (Soft Fail)
+        run: checkov -d . --framework terraform --soft-fail
+        working-directory: Environment/dev
+      
+        # ---------- Install Infracost ----------
+      - name: Install Infracost
+        shell: powershell
+        run: |
+          Invoke-WebRequest `
+            -Uri https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.ps1 `
+            -OutFile install-infracost.ps1
+          ./install-infracost.ps1
+
+        # ---------- Infracost Breakdown ----------
+      - name: Infracost Breakdown
+        shell: powershell
+        env:
+          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+        run: |
+          infracost breakdown `
+            --path Environment/dev `
+            --format json `
+            --out-file infracost.json
+
+        # ---------- Infracost PR Comment ----------
+      - name: Infracost PR Comment
+        shell: powershell
+        env:
+          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          infracost comment github `
+            --path infracost.json `
+            --repo $env:GITHUB_REPOSITORY `
+            --pull-request $env:GITHUB_REF_NAME `
+            --github-token $env:GITHUB_TOKEN `
+            --behavior update
+
+      # ---------- Terraform Plan ----------
+      - name: Terraform Plan
+        run: terraform plan -no-color -input=false
+        working-directory: Environment/dev
