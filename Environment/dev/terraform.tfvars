@@ -114,22 +114,22 @@ container_registries = {
     location            = "central india"
     sku                 = "Premium"
     admin_enabled       = true
-    georeplications = [
-      {
-        location                = "East US"
-        zone_redundancy_enabled = false
-        tags = {
-          environment = "dev"
-        }
-      },
-      {
-        location                = "West US"
-        zone_redundancy_enabled = false
-        tags = {
-          environment = "dev"
-        }
-      }
-    ]
+    georeplications = []
+    #   {
+    #     location                = "East U
+    #     zone_redundancy_enabled = false
+    #     tags = {
+    #       environment = "dev"
+    #     }
+    #   },
+    #   {
+    #     location                = "West US"
+    #     zone_redundancy_enabled = false
+    #     tags = {
+    #       environment = "dev"
+    #     }
+    #   }
+    #]
   }
 }
 

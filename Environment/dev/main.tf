@@ -9,11 +9,11 @@ module "resource_group" {
 #   storage_account = var.storage_account
 #   }
 
-# module "virtual_network" {
-#   depends_on = [ module.resource_group ]
-#   source     = "../../Modules/azurerm_virtual_network"
-#   virtual_networks = var.virtual_networks
-# }
+module "virtual_network" {
+  depends_on = [ module.resource_group ]
+  source     = "../../Modules/azurerm_virtual_network"
+  virtual_networks = var.virtual_networks
+}
 
 # module "network_interface" {
 #   depends_on = [ module.virtual_network ]
@@ -58,14 +58,14 @@ module "container_registries" {
 #   key_vaults = var.key_vaults 
 # }
 
-module "mssql_server" {
-  depends_on = [ module.resource_group ]
-  source                = "../../Modules/azurerm_MSSQLServer"
-  mssql_servers = var.mssql_servers
-}
+# module "mssql_server" {
+#   depends_on = [ module.resource_group ]
+#   source                = "../../Modules/azurerm_MSSQLServer"
+#   mssql_servers = var.mssql_servers
+# }
 
-module "mssql_database" {
-  depends_on = [ module.mssql_server ]
-  source                = "../../Modules/azurerm_MSSQL_database"
-  mssql_databases = var.mssql_databases
-}
+# module "mssql_database" {
+#   depends_on = [ module.mssql_server ]
+#   source                = "../../Modules/azurerm_MSSQL_database"
+#   mssql_databases = var.mssql_databases
+# }
