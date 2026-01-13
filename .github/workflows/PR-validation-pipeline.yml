@@ -59,9 +59,10 @@ jobs:
 
       # ---------- Install Checkov ----------
       - name: Install Checkov
+        shell: powershell
         run: |
-          "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\python.exe" -m pip install --upgrade pip
-          "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\python.exe" -m pip install checkov
+           & "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\python.exe" -m pip install --upgrade pip
+           & "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\python.exe" -m pip install checkov
 
       # ---------- Checkov Scan ----------
       - name: Checkov Scan (Soft Fail)
