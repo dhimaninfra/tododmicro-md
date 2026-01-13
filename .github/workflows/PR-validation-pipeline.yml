@@ -66,9 +66,11 @@ jobs:
 
       # ---------- Checkov Scan ----------
       - name: Checkov Scan (Soft Fail)
-        run: checkov -d . --framework terraform --soft-fail
+        shell: powershell
         working-directory: Environment/dev
-      
+        run: |
+          & "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\python.exe" -m checkov -d . --framework terraform --soft-fail
+          
         # ---------- Install Infracost ----------
       - name: Install Infracost (Windows - No Admin)
         shell: powershell
