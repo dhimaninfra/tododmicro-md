@@ -56,19 +56,38 @@ jobs:
       - name: TFLint Run (Soft Fail)
         run: tflint; exit 0
         working-directory: Environment/dev
+        
+      # ================= CHECKOV =================
+
+      # ---------- Setup Python ----------
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          check-latest: true
+
+      # ---------- Add Python Scripts to PATH ----------
+      - name: Add Python Scripts to PATH
+        shell: powershell
+        run: |
+          $scripts = python -c "import sysconfig; print(sysconfig.get_path('scripts'))"
+          echo $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       # ---------- Install Checkov ----------
       - name: Install Checkov
+        shell: powershell
         run: |
           python -m pip install --upgrade pip
-          pip install checkov
+          python -m pip install checkov --no-warn-script-location
 
       # ---------- Checkov Scan ----------
       - name: Checkov Scan (Soft Fail)
-        run: checkov -d . --framework terraform --soft-fail
+        shell: powershell
         working-directory: Environment/dev
-      
-        # ---------- Install Infracast ----------
+        run: |
+          checkov -d . --framework terraform --soft-fail
+          
+        # ---------- Install Infracost ----------
       - name: Install Infracost (Windows - No Admin)
         shell: powershell
         run: |
@@ -87,7 +106,7 @@ jobs:
       - name: Verify Infracost
         run: infracost --version
         
-        # ---------- Infracost Breakdown in table----------
+        # ---------- Infracost Breakdown ----------
       - name: Infracost Breakdown
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         shell: powershell
@@ -106,21 +125,21 @@ jobs:
         run: |
           infracost breakdown --path Environment/dev --format json --out-file infracost.json
 
-        # ---------- Infracost PR Comment ----------
-      - name: Infracost PR Comment
-        shell: powershell
-        env:
-          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-            infracost comment github `
-            --path infracost.json `
-            --repo $env:GITHUB_REPOSITORY `
-            --pull-request ${{ github.event.pull_request.number }} `
-            --github-token $env:GITHUB_TOKEN `
-            --behavior update
+      #   # ---------- Infracost PR Comment ----------
+      # - name: Infracost PR Comment
+      #   shell: powershell
+      #   env:
+      #     INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #       infracost comment github `
+      #       --path infracost.json `
+      #       --repo $env:GITHUB_REPOSITORY `
+      #       --pull-request ${{ github.event.pull_request.number }} `
+      #       --github-token $env:GITHUB_TOKEN `
+      #       --behavior update
 
-      # ---------- Terraform Plan ----------
+       # ---------- Terraform Plan ----------
       - name: Terraform Plan
         run: terraform plan -no-color -input=false
         working-directory: Environment/dev
