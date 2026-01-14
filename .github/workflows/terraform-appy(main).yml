@@ -33,7 +33,10 @@ jobs:
       - name: Terraform Init
         run: terraform init -input=false
         working-directory: Environment/dev
-
+      # ---------- Terraform Plan ----------
+      - name: Terraform Plan
+        run: terraform plan -no-color -input=false
+        working-directory: Environment/dev
       # ---------- Terraform Apply ----------
       - name: Terraform Apply
         run: terraform apply --auto-approve
