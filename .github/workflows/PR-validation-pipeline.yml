@@ -138,7 +138,7 @@ jobs:
             --github-token $env:GITHUB_TOKEN `
             --behavior update
 
-      # ---------- Terraform Plan ----------
+       # ---------- Terraform Plan ----------
       - name: Terraform Plan
         run: terraform plan -no-color -input=false
         working-directory: Environment/dev
