@@ -124,19 +124,19 @@ jobs:
         run: |
           infracost breakdown --path Environment/dev --format json --out-file infracost.json
 
-        # ---------- Infracost PR Comment ----------
-      - name: Infracost PR Comment
-        shell: powershell
-        env:
-          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-            infracost comment github `
-            --path infracost.json `
-            --repo $env:GITHUB_REPOSITORY `
-            --pull-request ${{ github.event.pull_request.number }} `
-            --github-token $env:GITHUB_TOKEN `
-            --behavior update
+      #   # ---------- Infracost PR Comment ----------
+      # - name: Infracost PR Comment
+      #   shell: powershell
+      #   env:
+      #     INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #       infracost comment github `
+      #       --path infracost.json `
+      #       --repo $env:GITHUB_REPOSITORY `
+      #       --pull-request ${{ github.event.pull_request.number }} `
+      #       --github-token $env:GITHUB_TOKEN `
+      #       --behavior update
 
        # ---------- Terraform Plan ----------
       - name: Terraform Plan
