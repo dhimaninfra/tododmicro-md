@@ -61,15 +61,15 @@ jobs:
       - name: Install Checkov
         shell: powershell
         run: |
-           & "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\python.exe" -m pip install --upgrade pip
-           & "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\python.exe" -m pip install checkov
+          python -m pip install --upgrade pip
+          pip install checkov
 
       # ---------- Checkov Scan ----------
       - name: Checkov Scan (Soft Fail)
         shell: powershell
         working-directory: Environment/dev
         run: |
-          & "C:\Users\mdhiman\AppData\Local\Programs\Python\Python311\Scripts\checkov.exe" -d . --framework terraform --soft-fail
+          checkov -d . --framework terraform --soft-fail
           
         # ---------- Install Infracost ----------
       - name: Install Infracost (Windows - No Admin)
