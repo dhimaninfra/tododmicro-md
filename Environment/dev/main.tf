@@ -52,11 +52,11 @@ module "container_registries" {
   container_registries  = var.container_registries
 }
 
-# module "key_vault" {
-#   depends_on = [ module.resource_group ]
-#   source            = "../../Modules/azurerm_keyvault"
-#   key_vaults = var.key_vaults 
-# }
+module "key_vault" {
+  depends_on = [ module.resource_group ]
+  source            = "../../Modules/azurerm_keyvault"
+  key_vaults = var.key_vaults 
+}
 
 module "mssql_server" {
   depends_on = [ module.resource_group ]
