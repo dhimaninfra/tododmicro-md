@@ -89,6 +89,7 @@ jobs:
         
         # ---------- Infracost Breakdown in table----------
       - name: Infracost Breakdown
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         shell: powershell
         env:
           INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
