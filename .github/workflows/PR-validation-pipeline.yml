@@ -57,23 +57,30 @@ jobs:
         run: tflint; exit 0
         working-directory: Environment/dev
         
-      - name: Setup Python
+      # ================= CHECKOV =================
+
+      # ---------- Setup Python ----------
+      - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          check-latest: true
 
+      # ---------- Add Python Scripts to PATH ----------
       - name: Add Python Scripts to PATH
         shell: powershell
         run: |
           $scripts = python -c "import sysconfig; print(sysconfig.get_path('scripts'))"
           echo $scripts | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+      # ---------- Install Checkov ----------
       - name: Install Checkov
         shell: powershell
         run: |
           python -m pip install --upgrade pip
-          python -m pip install checkov
+          python -m pip install checkov --no-warn-script-location
 
+      # ---------- Checkov Scan ----------
       - name: Checkov Scan (Soft Fail)
         shell: powershell
         working-directory: Environment/dev
