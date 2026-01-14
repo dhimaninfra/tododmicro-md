@@ -78,7 +78,7 @@ bastion_hosts = {
 
 key_vaults = {
   kv1 = {
-    name                = "mdkeyvault1"
+    name                = "mdkeyvault-md"
     resource_group_name = "rg-md-01"
     location            = "central india"
     sku_name            = "standard"
