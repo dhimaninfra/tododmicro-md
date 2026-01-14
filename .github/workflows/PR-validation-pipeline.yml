@@ -57,7 +57,7 @@ jobs:
         run: tflint; exit 0
         working-directory: Environment/dev
         
-            # ---------- Add Python Scripts to PATH ----------
+       # ---------- Add Python Scripts to PATH ----------
       - name: Add Python Scripts to PATH
         shell: powershell
         run: |
