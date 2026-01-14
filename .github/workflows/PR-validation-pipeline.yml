@@ -13,22 +13,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-
   terraform-pr:
     runs-on: self-hosted
+    environment: dev
 
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v5.0.0
 
-      # ---------- Export ARM credentials ----------
-      - name: Export ARM credentials
-        shell: powershell
-        run: |
-          echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $env:GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $env:GITHUB_ENV
-          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $env:GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV
+      # # ---------- Export ARM credentials ----------
+      # - name: Export ARM credentials
+      #   shell: powershell
+      #   run: |
+      #     echo "ARM_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}" >> $env:GITHUB_ENV
+      #     echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}" >> $env:GITHUB_ENV
+      #     echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $env:GITHUB_ENV
+      #     echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $env:GITHUB_ENV
           
       # ---------- Terraform Init ----------
       - name: Terraform Init
