@@ -62,14 +62,14 @@ jobs:
         shell: powershell
         run: |
           python -m pip install --upgrade pip
-          pip install checkov
+          python -m pip install checkov
 
       # ---------- Checkov Scan ----------
       - name: Checkov Scan (Soft Fail)
         shell: powershell
         working-directory: Environment/dev
         run: |
-          checkov -d . --framework terraform --soft-fail
+          python -m checkov -d . --framework terraform --soft-fail
           
         # ---------- Install Infracost ----------
       - name: Install Infracost (Windows - No Admin)
