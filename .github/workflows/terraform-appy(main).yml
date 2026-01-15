@@ -13,7 +13,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-
   terraform-apply:
     runs-on: self-hosted
     environment: dev
