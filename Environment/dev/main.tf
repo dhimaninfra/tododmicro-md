@@ -34,38 +34,38 @@ module "public_ip" {
   public_ips = var.public_ips
 }
 
-module "azurerm_bastion_host" {
-  depends_on = [ module.virtual_network, module.public_ip, module.resource_group ]
-  source                = "../../Modules/azurerm_bastion"
-  bastion_hosts = var.bastion_hosts
-}
+# module "azurerm_bastion_host" {
+#   depends_on = [ module.virtual_network, module.public_ip, module.resource_group ]
+#   source                = "../../Modules/azurerm_bastion"
+#   bastion_hosts = var.bastion_hosts
+# }
 
-module "kubernetes_cluster" {
-  depends_on = [ module.resource_group ]
-  source                     = "../../Modules/azurerm_AKS"
-  kubernetes_clusters = var.kubernetes_clusters
-}
+# module "kubernetes_cluster" {
+#   depends_on = [ module.resource_group ]
+#   source                     = "../../Modules/azurerm_AKS"
+#   kubernetes_clusters = var.kubernetes_clusters
+# }
 
-module "container_registries" {
-  depends_on = [ module.resource_group ]
-  source                = "../../Modules/azurerm_ACR"
-  container_registries  = var.container_registries
-}
+# module "container_registries" {
+#   depends_on = [ module.resource_group ]
+#   source                = "../../Modules/azurerm_ACR"
+#   container_registries  = var.container_registries
+# }
 
-module "key_vault" {
-  depends_on = [ module.resource_group ]
-  source            = "../../Modules/azurerm_keyvault"
-  key_vaults = var.key_vaults 
-}
+# module "key_vault" {
+#   depends_on = [ module.resource_group ]
+#   source            = "../../Modules/azurerm_keyvault"
+#   key_vaults = var.key_vaults 
+# }
 
-module "mssql_server" {
-  depends_on = [ module.resource_group ]
-  source                = "../../Modules/azurerm_MSSQLServer"
-  mssql_servers = var.mssql_servers
-}
+# module "mssql_server" {
+#   depends_on = [ module.resource_group ]
+#   source                = "../../Modules/azurerm_MSSQLServer"
+#   mssql_servers = var.mssql_servers
+# }
 
-module "mssql_database" {
-  depends_on = [ module.mssql_server ]
-  source                = "../../Modules/azurerm_MSSQL_database"
-  mssql_databases = var.mssql_databases
-}
+# module "mssql_database" {
+#   depends_on = [ module.mssql_server ]
+#   source                = "../../Modules/azurerm_MSSQL_database"
+#   mssql_databases = var.mssql_databases
+# }
