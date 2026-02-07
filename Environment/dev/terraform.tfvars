@@ -7,14 +7,14 @@ resource_groups = {
             owner = "mohit"
         }
     }
-    # "rg2" = {
-    #     name = "rg-md-02"
-    #     location = "central India"
-    #     tags = {
-    #           environemnt = "dev"
-    #           owner = "mohit"
-    #           }
-    #     }
+    "rg2" = {
+        name = "rg-md-02"
+        location = "central India"
+        tags = {
+              environemnt = "dev"
+              owner = "mohit"
+              }
+        }
 }
 
 storage_account = {
